@@ -10,7 +10,7 @@ namespace FantasyGroundsPackager
     {
         static void Main(string[] args)
         {
-            string rootDir = args[0];
+            string rootDir = Path.GetFullPath(args[0]);
             //string rootDir = @"C:\Users\User\source\repos\FantasyGroundsPackager\FG-PFRPG-Live-Hitpoints";
             FileAttributes rootDirAttributes = File.GetAttributes(rootDir);
             rootDirAttributes.HasFlag(FileAttributes.Directory);
