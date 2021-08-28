@@ -10,7 +10,7 @@ namespace FantasyGroundsPackager
     {
         static void Main(string[] args)
         {
-            string rootDir = Path.GetFullPath(args[0]);
+            string rootDir = GetPackageDirectory(args);
             FileAttributes rootDirAttributes = File.GetAttributes(rootDir);
             rootDirAttributes.HasFlag(FileAttributes.Directory);
             List<string> validFiles = ReadPackageContents(Path.Join(rootDir, "extension.xml"));
@@ -26,6 +26,18 @@ namespace FantasyGroundsPackager
                 archive.CreateEntryFromFile(Path.Join(rootDir, file), file);
             }
         }
+
+        static string GetPackageDirectory(string[] args)
+        {
+            if (args.Length > 0 && args[0].Trim().Length > 0)
+            {
+                return Path.GetFullPath(args[0].Trim());
+            } else
+            {
+                return Environment.CurrentDirectory;
+            }
+        }
+
         static List<string> ReadPackageContents(string extensionFile)
         {
             List<string> validFiles = new() { "extension.xml" };
