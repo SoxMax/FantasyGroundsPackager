@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Xml;
+using System.Linq;
 
 namespace FantasyGroundsPackager
 {
@@ -54,6 +55,7 @@ namespace FantasyGroundsPackager
                     validFiles.Add(fileNode.Attributes.GetNamedItem("file").Value);
                 }
             }
+            validFiles.AddRange(Directory.EnumerateFiles(Path.GetDirectoryName(extensionFile), "*.md").Select(mdFile => Path.GetFileName(mdFile)));
             return validFiles;
         }
     }
