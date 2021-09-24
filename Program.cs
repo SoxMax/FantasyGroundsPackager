@@ -11,19 +11,26 @@ namespace FantasyGroundsPackager
     {
         static void Main(string[] args)
         {
-            string rootDir = GetPackageDirectory(args);
-            ValidatePackageDirectory(rootDir);
-            List<string> validFiles = ReadPackageContents(Path.Join(rootDir, "extension.xml"));
+            try
+            {
+                string rootDir = GetPackageDirectory(args);
+                ValidatePackageDirectory(rootDir);
+                List<string> validFiles = ReadPackageContents(Path.Join(rootDir, "extension.xml"));
 
-            string packageFile = Path.Join(rootDir, $"{Path.GetFileName(rootDir)}.ext");
-            if(File.Exists(packageFile))
+                string packageFile = Path.Join(rootDir, $"{Path.GetFileName(rootDir)}.ext");
+                if (File.Exists(packageFile))
+                {
+                    File.Delete(packageFile);
+                }
+                using ZipArchive archive = ZipFile.Open(packageFile, ZipArchiveMode.Create);
+                foreach (string file in validFiles)
+                {
+                    archive.CreateEntryFromFile(Path.Join(rootDir, file), file);
+                }
+                Console.WriteLine("Success!");
+            } catch (Exception e)
             {
-                File.Delete(packageFile);
-            }
-            using ZipArchive archive = ZipFile.Open(packageFile, ZipArchiveMode.Create);
-            foreach (string file in validFiles)
-            {
-                archive.CreateEntryFromFile(Path.Join(rootDir, file), file);
+                Console.WriteLine(e.Message);
             }
         }
 
