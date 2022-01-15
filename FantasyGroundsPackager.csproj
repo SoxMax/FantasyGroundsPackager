@@ -2,8 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>SoxMax</Authors>
+    <StartupObject>FantasyGroundsPackager.Program</StartupObject>
+    <DebugType>portable</DebugType>
+    <RepositoryUrl>https://github.com/SoxMax/FantasyGroundsPackager</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
