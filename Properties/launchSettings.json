@@ -1,8 +1,8 @@
 {
   "profiles": {
     "FantasyGroundsPackager": {
-      "commandName": "Project",
-      "commandLineArgs": "C:\\Users\\User\\source\\repos\\FG-PFRPG-Live-Hitpoints"
+      "commandName": "Launch Linux",
+      "commandLineArgs": "/home/soxmax/Code/FG-Effect-Builder"
     }
   }
 }
