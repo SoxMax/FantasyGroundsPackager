@@ -7,6 +7,7 @@
     <StartupObject>FantasyGroundsPackager.Program</StartupObject>
     <DebugType>portable</DebugType>
     <RepositoryUrl>https://github.com/SoxMax/FantasyGroundsPackager</RepositoryUrl>
+    <Version>$(VersionPrefix)1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
