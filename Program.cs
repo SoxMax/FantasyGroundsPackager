@@ -13,8 +13,8 @@ namespace FantasyGroundsPackager
         {
             string rootDir = GetPackageDirectory(args);
             string definitionFile = ValidatePackageDirectory(rootDir);
-            List<string> validFiles = ReadPackageContents(rootDir, definitionFile);
-            validFiles.AddRange(Directory.EnumerateFiles(rootDir, "*.md").Select(mdFile => Path.GetFileName(mdFile)));
+            ISet<string> validFiles = ReadPackageContents(rootDir, definitionFile);
+            validFiles.UnionWith(Directory.EnumerateFiles(rootDir, "*.md").Select(mdFile => Path.GetFileName(mdFile)));
 
             string packageFile = Path.Join(rootDir, $"{Path.GetFileName(rootDir)}.ext");
             if (File.Exists(packageFile))
@@ -51,26 +51,27 @@ namespace FantasyGroundsPackager
             return "extension.xml";
         }
 
-        static List<string> ReadPackageContents(string dir, string packageFile)
+        static ISet<string> ReadPackageContents(string dir, string packageFile)
         {
             Console.WriteLine(Path.Join(dir, packageFile));
-            List<string> validFiles = new() { packageFile };
+            HashSet<string> validFiles = new() { packageFile };
             if (Path.GetExtension(packageFile) == ".xml")
             {
                 XmlDocument xmlDoc = new();
                 xmlDoc.Load(Path.Join(dir, packageFile));
-                List<string> files = ReadNodesForFiles(xmlDoc.SelectNodes("/root/*"));
+                ISet<string> files = ReadNodesForFiles(xmlDoc.SelectNodes("/root/*"));
                 foreach (string file in files)
                 {
-                    List<string> contents = ReadPackageContents(dir, file);
-                    validFiles.AddRange(contents);
+                    ISet<string> contents = ReadPackageContents(dir, file);
+                    validFiles.UnionWith(contents);
                 }
             }
             return validFiles;
         }
-        static List<string> ReadNodesForFiles(XmlNodeList nodes)
+
+        static ISet<string> ReadNodesForFiles(XmlNodeList nodes)
         {
-            List<string> validFiles = new() { };
+            HashSet<string> validFiles = new() { };
             foreach (XmlNode node in nodes)
             {
                 if (node.Name == "includefile")
@@ -85,10 +86,9 @@ namespace FantasyGroundsPackager
                         validFiles.Add(value);
                     }
                 }
-                validFiles.AddRange(ReadNodesForFiles(node.ChildNodes));
+                validFiles.UnionWith(ReadNodesForFiles(node.ChildNodes));
             }
             return validFiles;
         }
-
     }
 }
